@@ -2,4 +2,6 @@
 <resources>
     <string name="server_address">localhost</string>
     <integer name="server_port">65432</integer>
+    
+    <string name="local_data">cs423</string>
 </resources>

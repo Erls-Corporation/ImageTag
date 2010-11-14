@@ -2,29 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView
-        android:id="@+id/label"
+     <TextView
+        android:id="@+id/name_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Type here:"/>
+        android:text="Name:"/>
     <EditText
-        android:id="@+id/entry"
+        android:id="@+id/name_entry"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background"
-        android:layout_below="@id/label"/>
-    <Button
-        android:id="@+id/ok"
-        android:layout_width="wrap_content"
+        android:layout_toLeftOf="@id/name_label"/>
+    <TextView
+        android:id="@+id/location_label"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/entry"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="10dip"
-        android:text="OK" />
-    <Button
-        android:layout_width="wrap_content"
+        android:text="Location:"
+        android:layout_below="@id/name_label"/>
+    <EditText
+        android:id="@+id/location_entry"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/ok"
-        android:layout_alignTop="@id/ok"
-        android:text="Cancel" />
+        android:background="@android:drawable/editbox_background"
+        android:layout_toLeftOf="@id/location_label"/>
 </RelativeLayout>
