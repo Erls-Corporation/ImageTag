@@ -22,7 +22,7 @@ public class StatusTab extends Activity {
 
         TextView textview = new TextView(this);
         textview.setText("This is the Status tab ... "
-                + myLocation.getLongitude() + ", " + myLocation.getLatitude());
+                + myLocation.getLatitude() + ", " + myLocation.getLongitude());
 
         // this should be defined in layout/statustab.xml
         setContentView(textview);
