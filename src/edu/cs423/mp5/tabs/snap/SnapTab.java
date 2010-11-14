@@ -6,6 +6,7 @@ import edu.cs423.mp5.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,20 +17,19 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 public class SnapTab extends Activity {
-    private SnapView theSnapView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        theSnapView = new SnapView(this);
-        
+        setContentView(new SnapView(this));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.snaptab_menu, menu);
+
+        inflater.inflate(R.menu.snaptab_snap_menu, menu);
         return true;
     }
 
@@ -37,19 +37,16 @@ public class SnapTab extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.snap_option:
-                Toast.makeText(this, "Taking Photo!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Taking Photo!", Toast.LENGTH_SHORT)
+                        .show();
+                
+                Intent myIntent = new Intent(SnapTab.this, InputTab.class);
+                SnapTab.this.startActivity(myIntent);
+                
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    
-    private void setCameraMode() {
-        setContentView(theSnapView);
-    }
-    
-    private void setInputMode() {
-        setContentView(null);
     }
 }
 
@@ -61,7 +58,7 @@ class SnapView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
 
         mHolder = getHolder();
-        mHolder.addCallback(this);        
+        mHolder.addCallback(this);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 

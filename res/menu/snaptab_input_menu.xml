@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/save_snap_option" android:title="Save" />
+	<item android:id="@+id/back_snap_option" android:title="Back (Don't Save)" />
+</menu>
