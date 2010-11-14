@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="view_tab_name">ViewTab</string>
+    <string name="snap_tab_name">SnapTab</string>
+    <string name="status_tab_name">StatusTab</string>
+    <string name="app_name">ImageTag</string>
+</resources>

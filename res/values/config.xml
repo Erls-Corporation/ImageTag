@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_address">localhost</string>
+    <integer name="server_port">65432</integer>
+</resources>
