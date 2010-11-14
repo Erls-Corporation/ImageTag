@@ -19,7 +19,8 @@ public class InputTab extends Activity {
         super.onCreate(savedInstanceState);
 
         theSavedStatus = false;
-        theFilepath = getIntent().getExtras().getString(getString(R.string.filepath_key));
+        theFilepath = getIntent().getExtras().getString(
+                getString(R.string.filepath_key));
 
         setContentView(R.layout.snap_input);
     }

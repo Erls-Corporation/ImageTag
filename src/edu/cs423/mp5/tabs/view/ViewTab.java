@@ -1,17 +1,15 @@
 package edu.cs423.mp5.tabs.view;
 
+import edu.cs423.mp5.R;
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
 
 public class ViewTab extends Activity {
+    
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TextView textview = new TextView(this);
-        textview.setText("This is the View tab");
-        
-      //this should be defined in layout/viewtab.xml
-        setContentView(textview);
+        setContentView(R.layout.view);
     }
 }

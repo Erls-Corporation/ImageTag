@@ -58,11 +58,13 @@ public class SnapTab extends Activity {
 
     private void startInputActivity(String aPictureFilepath) {
         if (aPictureFilepath != null) {
-        Intent myIntent = new Intent(SnapTab.this, InputTab.class);
-        myIntent.putExtra(getString(R.string.filepath_key), aPictureFilepath);
-        SnapTab.this.startActivity(myIntent);
+            Intent myIntent = new Intent(SnapTab.this, InputTab.class);
+            myIntent.putExtra(getString(R.string.filepath_key),
+                    aPictureFilepath);
+            SnapTab.this.startActivity(myIntent);
         } else {
-            throw new IllegalStateException("Empty Filepath");
+            Toast.makeText(getBaseContext(), "Invalid Filepath",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -88,23 +90,30 @@ public class SnapTab extends Activity {
                 public void onPictureTaken(byte[] data, Camera aCamera) {
                     String theFilepath = null;
                     try {
-                        String myStoragePath = Environment.getExternalStorageDirectory()
-                                .getAbsolutePath() + "/"
-                                + getString(R.string.local_data);
+                        String myStoragePath = Environment
+                                .getExternalStorageDirectory()
+                                .getAbsolutePath()
+                                + "/" + getString(R.string.local_data);
                         File myFileLocation = new File(myStoragePath);
                         if (!myFileLocation.exists()) {
                             myFileLocation.mkdirs();
                         }
-                        
-                        theFilepath = String.format(myStoragePath + "/" + "%d.jpg", System
-                                .currentTimeMillis());
-                        
-                        FileOutputStream outStream = new FileOutputStream(theFilepath);
+
+                        theFilepath = String.format(myStoragePath + "/"
+                                + "%d.jpg", System.currentTimeMillis());
+
+                        FileOutputStream outStream = new FileOutputStream(
+                                theFilepath);
                         outStream.write(data);
                         outStream.close();
                     } catch (FileNotFoundException e) {
+                        Toast.makeText(getBaseContext(),
+                                "Error: FileNotFoundException",
+                                Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     } catch (IOException e) {
+                        Toast.makeText(getBaseContext(), "Error: IOException",
+                                Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     } finally {
                         startInputActivity(theFilepath);
@@ -113,7 +122,8 @@ public class SnapTab extends Activity {
             });
 
         } else {
-            throw new IllegalStateException("Camera Not Available");
+            Toast.makeText(this, "Camera Preview Not Available",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }
@@ -134,9 +144,12 @@ class SnapView extends SurfaceView implements SurfaceHolder.Callback {
         mCamera = Camera.open();
         try {
             mCamera.setPreviewDisplay(holder);
-        } catch (IOException exception) {
+        } catch (IOException e) {
             mCamera.release();
             mCamera = null;
+        } catch (NullPointerException e) {
+            Toast.makeText(getContext(), "Camera Not Available",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
