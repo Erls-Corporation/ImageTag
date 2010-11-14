@@ -7,7 +7,7 @@
         android:id="@+id/title_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Title:"/>
+        android:text="Title (required):"/>
     <EditText
         android:id="@+id/title_entry"
         android:layout_width="fill_parent"
@@ -18,7 +18,7 @@
         android:id="@+id/user_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Your NetID:"
+        android:text="Your NetID (required):"
         android:layout_below="@id/title_entry"/>
     <EditText
         android:id="@+id/user_entry"
@@ -30,7 +30,7 @@
         android:id="@+id/users_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Other NetID:"
+        android:text="People:"
         android:layout_below="@id/user_entry"/>
     <EditText
         android:id="@+id/users_entry"

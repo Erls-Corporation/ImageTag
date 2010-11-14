@@ -1,6 +1,5 @@
 package edu.cs423.mp5.tabs.snap;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -94,10 +93,6 @@ public class SnapTab extends Activity {
                                 .getExternalStorageDirectory()
                                 .getAbsolutePath()
                                 + "/" + getString(R.string.local_data);
-                        File myFileLocation = new File(myStoragePath);
-                        if (!myFileLocation.exists()) {
-                            myFileLocation.mkdirs();
-                        }
 
                         theFilepath = String.format(myStoragePath + "/"
                                 + "%d.jpg", System.currentTimeMillis());
