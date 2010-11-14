@@ -59,7 +59,7 @@ public class SnapTab extends Activity {
     private void startInputActivity(String aPictureFilepath) {
         if (aPictureFilepath != null) {
         Intent myIntent = new Intent(SnapTab.this, InputTab.class);
-        myIntent.putExtra("filepath", aPictureFilepath);
+        myIntent.putExtra(getString(R.string.filepath_key), aPictureFilepath);
         SnapTab.this.startActivity(myIntent);
         } else {
             throw new IllegalStateException("Empty Filepath");

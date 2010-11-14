@@ -3,26 +3,38 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
      <TextView
-        android:id="@+id/name_label"
+        android:id="@+id/title_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Name:"/>
+        android:text="Title:"/>
     <EditText
-        android:id="@+id/name_entry"
+        android:id="@+id/title_entry"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background"
-        android:layout_toLeftOf="@id/name_label"/>
+        android:layout_below="@id/title_label"/>
     <TextView
-        android:id="@+id/location_label"
+        android:id="@+id/user_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Location:"
-        android:layout_below="@id/name_label"/>
+        android:text="Your NetID:"
+        android:layout_below="@id/title_entry"/>
     <EditText
-        android:id="@+id/location_entry"
+        android:id="@+id/user_entry"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background"
-        android:layout_toLeftOf="@id/location_label"/>
+        android:layout_below="@id/user_label"/>
+    <TextView
+        android:id="@+id/users_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Other NetID:"
+        android:layout_below="@id/user_entry"/>
+    <EditText
+        android:id="@+id/users_entry"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_below="@id/users_label"/>
 </RelativeLayout>

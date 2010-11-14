@@ -4,4 +4,5 @@
     <integer name="server_port">65432</integer>
     
     <string name="local_data">cs423</string>
+    <string name="filepath_key">filepath_key</string>
 </resources>

@@ -1,14 +1,10 @@
 package edu.cs423.mp5.tabs.snap;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import edu.cs423.mp5.R;
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +19,7 @@ public class InputTab extends Activity {
         super.onCreate(savedInstanceState);
 
         theSavedStatus = false;
-        theFilepath = getIntent().getExtras().getString("filepath");
+        theFilepath = getIntent().getExtras().getString(getString(R.string.filepath_key));
 
         setContentView(R.layout.snap_input);
     }
