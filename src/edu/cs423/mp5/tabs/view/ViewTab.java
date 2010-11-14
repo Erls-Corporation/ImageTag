@@ -1,4 +1,4 @@
-package edu.cs423.mp5.tabs;
+package edu.cs423.mp5.tabs.view;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ public class ViewTab extends Activity {
 
         TextView textview = new TextView(this);
         textview.setText("This is the View tab");
+        
+      //this should be defined in layout/viewtab.xml
         setContentView(textview);
     }
 }

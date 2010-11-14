@@ -1,8 +1,8 @@
 package edu.cs423.mp5;
 
-import edu.cs423.mp5.tabs.SnapTab;
-import edu.cs423.mp5.tabs.StatusTab;
-import edu.cs423.mp5.tabs.ViewTab;
+import edu.cs423.mp5.tabs.snap.SnapTab;
+import edu.cs423.mp5.tabs.status.StatusTab;
+import edu.cs423.mp5.tabs.view.ViewTab;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;

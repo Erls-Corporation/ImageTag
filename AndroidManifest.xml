@@ -8,11 +8,11 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".tabs.ViewTab" android:label="@string/view_tab_name">
+    <activity android:name=".tabs.view.ViewTab" android:label="@string/view_tab_name">
     </activity>
-    <activity android:name=".tabs.StatusTab" android:label="@string/status_tab_name">
+    <activity android:name=".tabs.status.StatusTab" android:label="@string/status_tab_name">
     </activity>
-    <activity android:name=".tabs.SnapTab" android:label="@string/snap_tab_name">
+    <activity android:name=".tabs.snap.SnapTab" android:label="@string/snap_tab_name">
     </activity>
   </application>
   
