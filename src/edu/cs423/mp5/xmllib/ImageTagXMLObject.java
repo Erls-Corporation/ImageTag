@@ -23,6 +23,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class ImageTagXMLObject {
     public boolean isMutable;
@@ -252,7 +253,8 @@ public class ImageTagXMLObject {
         }
     }
 
-    public static ImageTagXMLObject readImageTagXMLObject(String aFilepath) {
+    public static ImageTagXMLObject readImageTagXMLObject(Context aContext,
+            String aFilepath) {
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser sp = spf.newSAXParser();
@@ -266,15 +268,30 @@ public class ImageTagXMLObject {
             FileReader r = new FileReader(aFilepath);
 
             xr.parse(new InputSource(r));
-            return handler.getParsedObject();
+            ImageTagXMLObject myObject = handler.getParsedObject();
+
+            if (myObject == null) {
+                Toast.makeText(aContext, "Error: Not Valid ImageTag",
+                        Toast.LENGTH_SHORT).show();
+            }
+            
+            return myObject;
 
         } catch (SAXException e) {
+            Toast.makeText(aContext, "Error: Parsing XML",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (FileNotFoundException e) {
+            Toast.makeText(aContext, "Error: File Not Found",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (IOException e) {
+            Toast.makeText(aContext, "Error: IOException",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
+            Toast.makeText(aContext, "Error: Parsing XML",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -308,7 +325,6 @@ class ImageTagSAXHandler extends DefaultHandler {
     @Override
     public void endDocument() {
         if (!theObject.finalizeObject()) {
-            Log.d("ERROR", "Error Parsing XML");
             theObject = null;
         }
     }

@@ -54,7 +54,7 @@ public class InputTab extends Activity {
         switch (item.getItemId()) {
             case R.id.save_snap_option:
                 theSavedStatus = true;
-                if (save()) {
+                if (tryToSave()) {
                     finish();
                 }
 
@@ -74,7 +74,7 @@ public class InputTab extends Activity {
         new File(theFilepath).delete();
     }
 
-    private boolean save() {
+    private boolean tryToSave() {
         ImageTagXMLObject myAssociatedXMLObject = new ImageTagXMLObject(this);
         myAssociatedXMLObject.setPictureFilepath(theFilepath);
         myAssociatedXMLObject
