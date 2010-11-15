@@ -3,14 +3,16 @@ package edu.cs423.mp5.tabs.snap;
 import java.io.File;
 
 import edu.cs423.mp5.R;
+import edu.cs423.mp5.xmllib.ImageTagXMLObject;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
-public class InputTab extends Activity {
+public class InputTab extends Activity implements saveXMLObject {
     private boolean theSavedStatus;
     private String theFilepath;
 
@@ -26,13 +28,6 @@ public class InputTab extends Activity {
     }
 
     @Override
-    public void finish() {
-        super.finish();
-
-        finalizeSave();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
@@ -45,28 +40,62 @@ public class InputTab extends Activity {
         switch (item.getItemId()) {
             case R.id.save_snap_option:
                 theSavedStatus = true;
-                finish();
-
+                if (finalizeSave()) {
+                    finish();
+                }
+                
                 return true;
             case R.id.back_snap_option:
                 theSavedStatus = false;
-                finish();
-
+                if (finalizeSave()) {
+                    finish();
+                }
+                
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void finalizeSave() {
+    private boolean finalizeSave() {
         if (theSavedStatus) {
-            Toast.makeText(this, theFilepath + " Saved", Toast.LENGTH_SHORT)
-                    .show();
+            ImageTagXMLObject myAssociatedXMLObject = new ImageTagXMLObject(this);
+            myAssociatedXMLObject.setPictureFilepath(theFilepath);
+            myAssociatedXMLObject
+                    .setTitle(((EditText) findViewById(R.id.title_entry))
+                            .getText().toString());
+            myAssociatedXMLObject
+                    .setUser(((EditText) findViewById(R.id.user_entry))
+                            .getText().toString());
+            myAssociatedXMLObject
+                    .setUsers(((EditText) findViewById(R.id.users_entry))
+                            .getText().toString());
+
+            return saveXMLObject(myAssociatedXMLObject);
+
         } else {
             new File(theFilepath).delete();
             Toast
                     .makeText(this, theFilepath + " Not Saved",
                             Toast.LENGTH_SHORT).show();
+
+            return true;
+        }
+    }
+
+    private boolean saveXMLObject(ImageTagXMLObject myAssociatedXMLObject) {
+        if (myAssociatedXMLObject.finalizeObject()) {
+            myAssociatedXMLObject.writeImageTagXMLObject(theFilepath + ".xml");
+            Toast.makeText(this, theFilepath + " Saved", Toast.LENGTH_SHORT)
+                    .show();
+
+            return true;
+        } else {
+            Toast.makeText(this,
+                    "Error Saving " + theFilepath + " (Complete All Fields)",
+                    Toast.LENGTH_SHORT).show();
+
+            return false;
         }
     }
 }

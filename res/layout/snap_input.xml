@@ -4,10 +4,16 @@
     android:layout_height="fill_parent">
     
      <TextView
+        android:id="@+id/header_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter Information (All Fields Required):"/>
+     <TextView
         android:id="@+id/title_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Title (required):"/>
+        android:text="Title:"
+        android:layout_below="@id/header_label"/>
     <EditText
         android:id="@+id/title_entry"
         android:layout_width="fill_parent"
@@ -18,7 +24,7 @@
         android:id="@+id/user_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Your NetID (required):"
+        android:text="Your NetID:"
         android:layout_below="@id/title_entry"/>
     <EditText
         android:id="@+id/user_entry"
@@ -30,7 +36,7 @@
         android:id="@+id/users_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="People:"
+        android:text="Associated People (NetIDs):"
         android:layout_below="@id/user_entry"/>
     <EditText
         android:id="@+id/users_entry"

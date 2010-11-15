@@ -1,7 +1,9 @@
 package edu.cs423.mp5.xmllib;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,18 +16,34 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 public class ImageTagXMLObject {
     public boolean isMutable;
+    private final Context theContext;
     private String thePictureFilepath;
     private String theTitle;
     private String theUser;
     private String theUsers;
 
+    public ImageTagXMLObject(Context aContext) {
+        isMutable = true;
+
+        theContext = aContext;
+        thePictureFilepath = null;
+        theTitle = null;
+        theUser = null;
+        theUsers = null;
+    }
+
     public ImageTagXMLObject() {
         isMutable = true;
 
+        theContext = null;
         thePictureFilepath = null;
         theTitle = null;
         theUser = null;
@@ -33,13 +51,22 @@ public class ImageTagXMLObject {
     }
 
     public boolean finalizeObject() {
-        if (thePictureFilepath != null && theTitle != null && theUser != null
-                && theUsers != null) {
+        if (checkNullField() && checkEmptyField()) {
             isMutable = false;
             return true;
         } else {
             return false;
         }
+    }
+
+    private boolean checkNullField() {
+        return thePictureFilepath != null && theTitle != null
+                && theUser != null && theUsers != null;
+    }
+
+    private boolean checkEmptyField() {
+        return (!thePictureFilepath.equals("")) && (!theTitle.equals(""))
+                && (!theUser.equals("")) && (!theUsers.equals(""));
     }
 
     public String getPictureFilepath() {
@@ -94,14 +121,81 @@ public class ImageTagXMLObject {
         }
     }
 
-    public boolean writeImageTagXMLObject() {
+    public boolean writeImageTagXMLObject(String aFilepath) {
         if (isMutable) {
             throw new UnsupportedOperationException(
                     "Cannot Write Out Mutable Object");
         } else {
-            //TODO:
-            
-            return false;
+            try {
+                FileWriter myFileWriter = new FileWriter(aFilepath);
+                BufferedWriter myOutputStream = new BufferedWriter(myFileWriter);
+
+                StringBuilder myXMLOutput = new StringBuilder();
+
+                myXMLOutput.append(getXMLHeader());
+                myXMLOutput.append(getXMLPictureFilepath());
+                myXMLOutput.append(getXMLTitle());
+                myXMLOutput.append(getXMLUser());
+                myXMLOutput.append(getXMLUsers());
+                myXMLOutput.append(getXMLLocation());
+                myXMLOutput.append(getXMLTime());
+                myXMLOutput.append(getXMLFooter());
+
+                myOutputStream.write(myXMLOutput.toString());
+                myOutputStream.close();
+                myFileWriter.close();
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
+
+    private String getXMLHeader() {
+        return "<INFORMATION_CHUNK>";
+    }
+
+    private String getXMLFooter() {
+        return "</INFORMATION_CHUNK>";
+    }
+
+    private String getXMLPictureFilepath() {
+        return "<PICTURE_FILEPATH>" + thePictureFilepath
+                + "</PICTURE_FILEPATH>";
+    }
+
+    private String getXMLTitle() {
+        return "<TITLE>" + theTitle + "</TITLE>";
+    }
+
+    private String getXMLUser() {
+        return "<USER_NETID>" + theUser + "</USER_NETID>";
+    }
+
+    private String getXMLUsers() {
+        return "<PEOPLE_NETID>" + theUsers + "</PEOPLE_NETID>";
+    }
+    
+    private String getXMLTime() {
+        return "";
+    }
+
+    private String getXMLLocation() {
+        LocationManager myLocationManager = (LocationManager) theContext
+                .getSystemService(Context.LOCATION_SERVICE);
+        Location myLocation = myLocationManager
+                .getLastKnownLocation(myLocationManager.getBestProvider(
+                        new Criteria(), false));
+
+        if (myLocation != null) {
+
+            return "<LOCATION_LATITUDE>" + myLocation.getLatitude()
+                    + "</LOCATION_LATITUDE>" + "<LOCATION_LONGITUDE>"
+                    + myLocation.getLongitude() + "</LOCATION_LONGITUDE>";
+        } else {
+            return "";
         }
     }
 
@@ -130,7 +224,7 @@ public class ImageTagXMLObject {
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
 }
@@ -153,10 +247,12 @@ class ImageTagSAXHandler extends DefaultHandler {
         }
     }
 
+    @Override
     public void startDocument() {
         theObject = new ImageTagXMLObject();
     }
 
+    @Override
     public void endDocument() {
         if (!theObject.finalizeObject()) {
             Log.d("ERROR", "Error Parsing XML");
@@ -164,10 +260,12 @@ class ImageTagSAXHandler extends DefaultHandler {
         }
     }
 
+    @Override
     public void startElement(String uri, String name, String qName,
             Attributes atts) {
     }
 
+    @Override
     public void endElement(String uri, String name, String qName) {
         if (name.equals("PICTURE_FILEPATH")) {
             theObject.setPictureFilepath(theData.toString());
@@ -180,6 +278,7 @@ class ImageTagSAXHandler extends DefaultHandler {
         }
     }
 
+    @Override
     public void characters(char ch[], int start, int length) {
         theData = new StringBuilder();
         for (int i = start; i < start + length; i++) {
