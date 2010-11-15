@@ -14,18 +14,45 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Log;
+
 public class ImageTagXMLObject {
-    private final String thePictureFilepath;
+    public boolean isMutable;
+    private String thePictureFilepath;
     private String theTitle;
     private String theUser;
     private String theUsers;
 
-    public ImageTagXMLObject(String aPictureFilepath) {
-        thePictureFilepath = aPictureFilepath;
+    public ImageTagXMLObject() {
+        isMutable = true;
+
+        thePictureFilepath = null;
+        theTitle = null;
+        theUser = null;
+        theUsers = null;
     }
-    
+
+    public boolean finalizeObject() {
+        if (thePictureFilepath != null && theTitle != null && theUser != null
+                && theUsers != null) {
+            isMutable = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public String getPictureFilepath() {
         return thePictureFilepath;
+    }
+
+    public void setPictureFilepath(String aPictureFilepath) {
+        if (isMutable) {
+            thePictureFilepath = aPictureFilepath;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
     }
 
     public String getTitle() {
@@ -33,7 +60,12 @@ public class ImageTagXMLObject {
     }
 
     public void setTitle(String aTitle) {
-        theTitle = aTitle;
+        if (isMutable) {
+            theTitle = aTitle;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
     }
 
     public String getUser() {
@@ -41,7 +73,12 @@ public class ImageTagXMLObject {
     }
 
     public void setUser(String aUser) {
-        theUser = aUser;
+        if (isMutable) {
+            theUser = aUser;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
     }
 
     public String getUsers() {
@@ -49,11 +86,23 @@ public class ImageTagXMLObject {
     }
 
     public void setUsers(String aUsers) {
-        theUsers = aUsers;
+        if (isMutable) {
+            theUsers = aUsers;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
     }
 
     public boolean writeImageTagXMLObject() {
-        return false;
+        if (isMutable) {
+            throw new UnsupportedOperationException(
+                    "Cannot Write Out Mutable Object");
+        } else {
+            //TODO:
+            
+            return false;
+        }
     }
 
     public static ImageTagXMLObject readImageTagXMLObject(String aFilepath) {
@@ -62,15 +111,16 @@ public class ImageTagXMLObject {
             SAXParser sp = spf.newSAXParser();
 
             XMLReader xr = sp.getXMLReader();
-            
+
             ImageTagSAXHandler handler = new ImageTagSAXHandler();
             xr.setContentHandler(handler);
             xr.setErrorHandler(handler);
-            
+
             FileReader r = new FileReader(aFilepath);
-            
+
             xr.parse(new InputSource(r));
-            
+            return handler.getParsedObject();
+
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -79,64 +129,61 @@ public class ImageTagXMLObject {
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
-        }        
+        }
         
         return null;
     }
 }
 
 class ImageTagSAXHandler extends DefaultHandler {
+    private ImageTagXMLObject theObject;
+    private StringBuilder theData;
+
     public ImageTagSAXHandler() {
         super();
+
+        theObject = null;
+    }
+
+    public ImageTagXMLObject getParsedObject() {
+        if (theObject.isMutable) {
+            return null;
+        } else {
+            return theObject;
+        }
     }
 
     public void startDocument() {
-        System.out.println("Start document");
+        theObject = new ImageTagXMLObject();
     }
 
     public void endDocument() {
-        System.out.println("End document");
+        if (!theObject.finalizeObject()) {
+            Log.d("ERROR", "Error Parsing XML");
+            theObject = null;
+        }
     }
 
     public void startElement(String uri, String name, String qName,
             Attributes atts) {
-        if ("".equals(uri))
-            System.out.println("Start element: " + qName);
-        else
-            System.out.println("Start element: {" + uri + "}" + name);
     }
 
     public void endElement(String uri, String name, String qName) {
-        if ("".equals(uri))
-            System.out.println("End element: " + qName);
-        else
-            System.out.println("End element:   {" + uri + "}" + name);
+        if (name.equals("PICTURE_FILEPATH")) {
+            theObject.setPictureFilepath(theData.toString());
+        } else if (name.equals("TITLE")) {
+            theObject.setTitle(theData.toString());
+        } else if (name.equals("USER_NETID")) {
+            theObject.setUser(theData.toString());
+        } else if (name.equals("PEOPLE")) {
+            theObject.setUsers(theData.toString());
+        }
     }
 
     public void characters(char ch[], int start, int length) {
-        System.out.print("Characters:    \"");
+        theData = new StringBuilder();
         for (int i = start; i < start + length; i++) {
-            switch (ch[i]) {
-                case '\\':
-                    System.out.print("\\\\");
-                    break;
-                case '"':
-                    System.out.print("\\\"");
-                    break;
-                case '\n':
-                    System.out.print("\\n");
-                    break;
-                case '\r':
-                    System.out.print("\\r");
-                    break;
-                case '\t':
-                    System.out.print("\\t");
-                    break;
-                default:
-                    System.out.print(ch[i]);
-                    break;
-            }
+            theData.append(ch[i]);
         }
-        System.out.print("\"\n");
     }
 }

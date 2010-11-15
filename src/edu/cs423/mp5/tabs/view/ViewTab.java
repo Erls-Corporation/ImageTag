@@ -13,6 +13,6 @@ public class ViewTab extends Activity {
 
         setContentView(R.layout.view);
         
-        ImageTagXMLObject.readImageTagXMLObject("/sdcard/AndroidManifest.xml");
+        ImageTagXMLObject.readImageTagXMLObject("/sdcard/test.xml");
     }
 }
