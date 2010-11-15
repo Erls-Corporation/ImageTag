@@ -10,11 +10,11 @@ import android.widget.Toast;
 
 public class StatusTab extends Activity {
     private LocationManager theLocationService;
-    
+
     @Override
     public void onResume() {
         super.onResume();
-        
+
         theLocationService = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         Location myLocation = theLocationService
@@ -27,11 +27,12 @@ public class StatusTab extends Activity {
             textview.setText("This is the Status tab ... "
                     + myLocation.getLatitude() + ", "
                     + myLocation.getLongitude());
-            
-         // this should be defined in layout/statustab.xml
+
+            // this should be defined in layout/statustab.xml
             setContentView(textview);
         } else {
-            Toast.makeText(this, "Location Not Available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Location Not Available", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 }

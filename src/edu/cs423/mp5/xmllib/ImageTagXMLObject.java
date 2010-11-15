@@ -31,6 +31,9 @@ public class ImageTagXMLObject {
     private String theTitle;
     private String theUser;
     private String theUsers;
+    private String theTime;
+    private String theLatitude;
+    private String theLongitude;
 
     public ImageTagXMLObject(Context aContext) {
         isMutable = true;
@@ -40,6 +43,9 @@ public class ImageTagXMLObject {
         theTitle = null;
         theUser = null;
         theUsers = null;
+        theTime = null;
+        theLatitude = null;
+        theLongitude = null;
     }
 
     public ImageTagXMLObject() {
@@ -50,6 +56,9 @@ public class ImageTagXMLObject {
         theTitle = null;
         theUser = null;
         theUsers = null;
+        theTime = null;
+        theLatitude = null;
+        theLongitude = null;
     }
 
     public boolean finalizeObject() {
@@ -123,6 +132,45 @@ public class ImageTagXMLObject {
         }
     }
 
+    public String getTime() {
+        return theTime;
+    }
+
+    public void setTime(String aTime) {
+        if (isMutable) {
+            theTime = aTime;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
+    }
+
+    public String getLatitude() {
+        return theLatitude;
+    }
+
+    public void setLatitude(String aLatitude) {
+        if (isMutable) {
+            theLatitude = aLatitude;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
+    }
+
+    public String getLongitude() {
+        return theLongitude;
+    }
+
+    public void setLongitude(String aLongitude) {
+        if (isMutable) {
+            theLongitude = aLongitude;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot Modify Immutable Object");
+        }
+    }
+
     public boolean writeImageTagXMLObject(String aFilepath) {
         if (isMutable) {
             throw new UnsupportedOperationException(
@@ -179,11 +227,11 @@ public class ImageTagXMLObject {
     private String getXMLUsers() {
         return "<PEOPLE_NETID>" + theUsers + "</PEOPLE_NETID>";
     }
-    
+
     private String getXMLTime() {
         SimpleDateFormat myFormatter = new SimpleDateFormat("yyyyMMdd:hhmm");
         String myTime = myFormatter.format(new Date());
-        
+
         return "<TIME>" + myTime + "</TIME>";
     }
 
@@ -280,6 +328,12 @@ class ImageTagSAXHandler extends DefaultHandler {
             theObject.setUser(theData.toString());
         } else if (name.equals("PEOPLE")) {
             theObject.setUsers(theData.toString());
+        } else if (name.equals("TIME")) {
+            theObject.setTime(theData.toString());
+        } else if (name.equals("LOCATION_LATITUDE")) {
+            theObject.setLatitude(theData.toString());
+        } else if (name.equals("LOCATION_LONGITUDE")) {
+            theObject.setLongitude(theData.toString());
         }
     }
 
