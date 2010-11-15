@@ -12,7 +12,5 @@ public class ViewTab extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.view);
-        
-        ImageTagXMLObject.readImageTagXMLObject("/sdcard/test.xml");
     }
 }

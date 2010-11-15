@@ -43,7 +43,6 @@ public class InputTab extends Activity implements saveXMLObject {
             Toast.makeText(this, theFilepath + " Saved", Toast.LENGTH_SHORT)
                     .show();
         } else {
-            new File(theFilepath).delete();
             Toast
                     .makeText(this, theFilepath + " Not Saved",
                             Toast.LENGTH_SHORT).show();
@@ -62,12 +61,17 @@ public class InputTab extends Activity implements saveXMLObject {
                 return true;
             case R.id.back_snap_option:
                 theSavedStatus = false;
+                delete();
                 finish();
 
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void delete() {
+        new File(theFilepath).delete();
     }
 
     private boolean save() {
@@ -92,9 +96,8 @@ public class InputTab extends Activity implements saveXMLObject {
 
             return true;
         } else {
-            Toast.makeText(this,
-                    "Error Saving " + theFilepath + " (Complete All Fields)",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error Saving " + theFilepath
+                    + " (Complete All Fields)", Toast.LENGTH_SHORT).show();
 
             return false;
         }
