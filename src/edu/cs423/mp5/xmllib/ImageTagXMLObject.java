@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -179,7 +181,10 @@ public class ImageTagXMLObject {
     }
     
     private String getXMLTime() {
-        return "";
+        SimpleDateFormat myFormatter = new SimpleDateFormat("yyyyMMdd:hhmm");
+        String myTime = myFormatter.format(new Date());
+        
+        return "<TIME>" + myTime + "</TIME>";
     }
 
     private String getXMLLocation() {
