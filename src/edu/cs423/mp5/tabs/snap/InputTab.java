@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class InputTab extends Activity implements saveXMLObject {
+public class InputTab extends Activity {
     private boolean theSavedStatus;
     private String theFilepath;
 

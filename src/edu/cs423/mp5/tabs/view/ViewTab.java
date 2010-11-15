@@ -1,7 +1,6 @@
 package edu.cs423.mp5.tabs.view;
 
 import edu.cs423.mp5.R;
-import edu.cs423.mp5.xmllib.ImageTagXMLObject;
 import android.app.Activity;
 import android.os.Bundle;
 
