@@ -4,23 +4,23 @@
   <application android:icon="@drawable/icon" android:label="@string/app_name">
     <uses-library android:name="com.google.android.maps" />
     
-    <activity android:name=".Main" android:label="@string/app_name">
+    <activity android:name=".Main" android:label="@string/app_name" android:screenOrientation="landscape">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
     
-    <activity android:name=".tabs.view.ViewTab">
+    <activity android:name=".tabs.view.ViewTab" android:screenOrientation="landscape">
     </activity>
     
-    <activity android:name=".tabs.status.StatusTab">
+    <activity android:name=".tabs.status.StatusTab" android:screenOrientation="landscape">
     </activity>
     
-    <activity android:name=".tabs.snap.SnapTab">
+    <activity android:name=".tabs.snap.SnapTab" android:screenOrientation="landscape">
     </activity>
     
-    <activity android:name=".tabs.snap.InputTab">
+    <activity android:name=".tabs.snap.InputTab" android:screenOrientation="landscape">
     </activity>
   </application>
   
