@@ -13,8 +13,6 @@ import android.os.Environment;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
-/* this is a test comment from john */
-
 public class Main extends TabActivity {
 
     @Override

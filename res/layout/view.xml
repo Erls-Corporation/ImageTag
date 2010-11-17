@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
-    <TextView
-        android:id="@+id/title_label"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="This is the View Tab"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+    
+		<com.google.android.maps.MapView
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/mapview"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:enabled="true"
+		    android:apiKey="0tpZhNRq9oQ_Jwxl3-X4RNMUtr1-gWHVp4vjNaQ"
+		/>
 </RelativeLayout>
