@@ -103,9 +103,9 @@ public class ViewTab extends MapActivity {
 class MapOverlayItem extends OverlayItem {
     private String theXMLObjectLocation;
 
-    public MapOverlayItem(String aXMLObjectLocation, GeoPoint arg0,
-            String arg1, String arg2) {
-        super(arg0, arg1, arg2);
+    public MapOverlayItem(String aXMLObjectLocation, GeoPoint aGeoPoint,
+            String aTitle, String aSnippet) {
+        super(aGeoPoint, aTitle, aSnippet);
 
         theXMLObjectLocation = aXMLObjectLocation;
     }

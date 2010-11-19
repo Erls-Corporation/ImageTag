@@ -87,7 +87,7 @@ public class InputTab extends Activity {
             ImageTagXMLObject myAssociatedXMLObject = new ImageTagXMLObject(
                     this);
             myAssociatedXMLObject.setPictureFilepath(theFilepath);
-            myAssociatedXMLObject.setPreviewPicturePath("." + theFilepath);
+            myAssociatedXMLObject.setPreviewPicturePath(theFilepath+".jpg");
             myAssociatedXMLObject
                     .setTitle(((EditText) findViewById(R.id.title_entry))
                             .getText().toString());
@@ -120,7 +120,7 @@ public class InputTab extends Activity {
                           width, height, matrix, true);
         FileOutputStream out;
         try {
-            out = new FileOutputStream("." + theFilepath);
+            out = new FileOutputStream(theFilepath + ".jpg");
             resizedBitmap.compress(CompressFormat.JPEG, 90, out);
             return true;
         } catch (FileNotFoundException e) {

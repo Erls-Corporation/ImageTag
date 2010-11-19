@@ -230,7 +230,7 @@ public class ImageTagXMLObject {
     }
 
     private String getXMLPreviewPictureFilepath() {
-        return "<PREVIEW_PICTURE_FILEPATH>." + thePictureFilepath
+        return "<PREVIEW_PICTURE_FILEPATH>" + thePreviewPictureFilepath
                 + "</PREVIEW_PICTURE_FILEPATH>";
     }
 
