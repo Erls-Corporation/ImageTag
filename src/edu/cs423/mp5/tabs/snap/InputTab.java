@@ -1,10 +1,16 @@
 package edu.cs423.mp5.tabs.snap;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import edu.cs423.mp5.R;
 import edu.cs423.mp5.xmllib.ImageTagXMLObject;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,19 +81,51 @@ public class InputTab extends Activity {
     }
 
     private boolean tryToSave() {
-        ImageTagXMLObject myAssociatedXMLObject = new ImageTagXMLObject(this);
-        myAssociatedXMLObject.setPictureFilepath(theFilepath);
-        myAssociatedXMLObject
-                .setTitle(((EditText) findViewById(R.id.title_entry)).getText()
-                        .toString());
-        myAssociatedXMLObject
-                .setUser(((EditText) findViewById(R.id.user_entry)).getText()
-                        .toString());
-        myAssociatedXMLObject
-                .setUsers(((EditText) findViewById(R.id.users_entry)).getText()
-                        .toString());
+        if (tryToCreatePreview()) {
 
-        return saveXMLObject(myAssociatedXMLObject);
+            ImageTagXMLObject myAssociatedXMLObject = new ImageTagXMLObject(
+                    this);
+            myAssociatedXMLObject.setPictureFilepath(theFilepath);
+            myAssociatedXMLObject.setPreviewPicturePath("." + theFilepath);
+            myAssociatedXMLObject
+                    .setTitle(((EditText) findViewById(R.id.title_entry))
+                            .getText().toString());
+            myAssociatedXMLObject
+                    .setUser(((EditText) findViewById(R.id.user_entry))
+                            .getText().toString());
+            myAssociatedXMLObject
+                    .setUsers(((EditText) findViewById(R.id.users_entry))
+                            .getText().toString());
+
+            return saveXMLObject(myAssociatedXMLObject);
+        }
+        return false;
+    }
+
+    private boolean tryToCreatePreview() {
+        Toast.makeText(this, "Creating Preview...", Toast.LENGTH_SHORT).show();
+        
+        Bitmap myBitmap = BitmapFactory.decodeFile(theFilepath);
+        int width = myBitmap.getWidth();
+        int height = myBitmap.getHeight();
+        int newWidth = 38;
+        int newHeight = 50;
+        
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+       
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap resizedBitmap = Bitmap.createBitmap(myBitmap, 0, 0,
+                          width, height, matrix, true);
+        FileOutputStream out;
+        try {
+            out = new FileOutputStream("." + theFilepath);
+            resizedBitmap.compress(CompressFormat.JPEG, 90, out);
+            return true;
+        } catch (FileNotFoundException e) {
+            return false;
+        }
     }
 
     private boolean saveXMLObject(ImageTagXMLObject myAssociatedXMLObject) {
@@ -96,8 +134,9 @@ public class InputTab extends Activity {
 
             return true;
         } else {
-            Toast.makeText(this, "Error Saving " + theFilepath
-                    + " (Complete All Fields)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Error Saving " + theFilepath + " (Complete All Fields)",
+                    Toast.LENGTH_SHORT).show();
 
             return false;
         }

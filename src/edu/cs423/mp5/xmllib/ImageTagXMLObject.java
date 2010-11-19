@@ -28,6 +28,7 @@ public class ImageTagXMLObject {
     public boolean isMutable;
     private final Context theContext;
     private String thePictureFilepath;
+    private String thePreviewPictureFilepath;
     private String theTitle;
     private String theUser;
     private String theUsers;
@@ -40,6 +41,7 @@ public class ImageTagXMLObject {
 
         theContext = aContext;
         thePictureFilepath = null;
+        thePreviewPictureFilepath = null;
         theTitle = null;
         theUser = null;
         theUsers = null;
@@ -53,6 +55,7 @@ public class ImageTagXMLObject {
 
         theContext = null;
         thePictureFilepath = null;
+        thePreviewPictureFilepath = null;
         theTitle = null;
         theUser = null;
         theUsers = null;
@@ -71,12 +74,13 @@ public class ImageTagXMLObject {
     }
 
     private boolean checkNullField() {
-        return thePictureFilepath != null && theTitle != null
-                && theUser != null && theUsers != null;
+        return thePictureFilepath != null && thePreviewPictureFilepath != null
+                && theTitle != null && theUser != null && theUsers != null;
     }
 
     private boolean checkEmptyField() {
         return (!thePictureFilepath.equals("")) && (!theTitle.equals(""))
+                && (!thePreviewPictureFilepath.equals(""))
                 && (!theUser.equals("")) && (!theUsers.equals(""));
     }
 
@@ -91,6 +95,14 @@ public class ImageTagXMLObject {
             throw new UnsupportedOperationException(
                     "Cannot Modify Immutable Object");
         }
+    }
+
+    public String getPreviewPicturePath() {
+        return thePreviewPictureFilepath;
+    }
+
+    public void setPreviewPicturePath(String aPreviewPictureFilepath) {
+        thePreviewPictureFilepath = aPreviewPictureFilepath;
     }
 
     public String getTitle() {
@@ -145,8 +157,8 @@ public class ImageTagXMLObject {
         }
     }
 
-    public String getLatitude() {
-        return theLatitude;
+    public double getLatitude() {
+        return Double.parseDouble(theLatitude);
     }
 
     public void setLatitude(String aLatitude) {
@@ -158,8 +170,8 @@ public class ImageTagXMLObject {
         }
     }
 
-    public String getLongitude() {
-        return theLongitude;
+    public double getLongitude() {
+        return Double.parseDouble(theLongitude);
     }
 
     public void setLongitude(String aLongitude) {
@@ -184,6 +196,7 @@ public class ImageTagXMLObject {
 
                 myXMLOutput.append(getXMLHeader());
                 myXMLOutput.append(getXMLPictureFilepath());
+                myXMLOutput.append(getXMLPreviewPictureFilepath());
                 myXMLOutput.append(getXMLTitle());
                 myXMLOutput.append(getXMLUser());
                 myXMLOutput.append(getXMLUsers());
@@ -214,6 +227,11 @@ public class ImageTagXMLObject {
     private String getXMLPictureFilepath() {
         return "<PICTURE_FILEPATH>" + thePictureFilepath
                 + "</PICTURE_FILEPATH>";
+    }
+
+    private String getXMLPreviewPictureFilepath() {
+        return "<PREVIEW_PICTURE_FILEPATH>." + thePictureFilepath
+                + "</PREVIEW_PICTURE_FILEPATH>";
     }
 
     private String getXMLTitle() {
@@ -270,27 +288,28 @@ public class ImageTagXMLObject {
             ImageTagXMLObject myObject = handler.getParsedObject();
 
             if (myObject == null) {
-                Toast.makeText(aContext, "Error: Not Valid ImageTag",
+                Toast.makeText(aContext,
+                        "Error: Not Valid ImageTag: " + aFilepath,
                         Toast.LENGTH_SHORT).show();
             }
-            
+
             return myObject;
 
         } catch (SAXException e) {
-            Toast.makeText(aContext, "Error: Parsing XML",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(aContext, "Error: Parsing XML", Toast.LENGTH_SHORT)
+                    .show();
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             Toast.makeText(aContext, "Error: File Not Found",
                     Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (IOException e) {
-            Toast.makeText(aContext, "Error: IOException",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(aContext, "Error: IOException", Toast.LENGTH_SHORT)
+                    .show();
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
-            Toast.makeText(aContext, "Error: Parsing XML",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(aContext, "Error: Parsing XML", Toast.LENGTH_SHORT)
+                    .show();
             e.printStackTrace();
         }
 
@@ -309,11 +328,11 @@ class ImageTagSAXHandler extends DefaultHandler {
     }
 
     public ImageTagXMLObject getParsedObject() {
-        if (theObject.isMutable) {
-            return null;
-        } else {
+        if (theObject != null && !theObject.isMutable) {
             return theObject;
         }
+
+        return null;
     }
 
     @Override
@@ -337,11 +356,13 @@ class ImageTagSAXHandler extends DefaultHandler {
     public void endElement(String uri, String name, String qName) {
         if (name.equals("PICTURE_FILEPATH")) {
             theObject.setPictureFilepath(theData.toString());
+        } else if (name.equals("PREVIEW_PICTURE_FILEPATH")) {
+            theObject.setPreviewPicturePath(theData.toString());
         } else if (name.equals("TITLE")) {
             theObject.setTitle(theData.toString());
         } else if (name.equals("USER_NETID")) {
             theObject.setUser(theData.toString());
-        } else if (name.equals("PEOPLE")) {
+        } else if (name.equals("PEOPLE_NETID")) {
             theObject.setUsers(theData.toString());
         } else if (name.equals("TIME")) {
             theObject.setTime(theData.toString());
