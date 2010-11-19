@@ -31,6 +31,13 @@ public class ViewTab extends MapActivity {
 
         theMapView = (MapView) findViewById(R.id.mapview);
         theMapView.setBuiltInZoomControls(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        theMapView.getOverlays().clear();
 
         scanAndAddOverlay();
     }
@@ -79,10 +86,10 @@ public class ViewTab extends MapActivity {
             MapOverlay overlay = new MapOverlay(Drawable
                     .createFromPath(myObject.getPreviewPicturePath()), this);
 
-            overlay.addOverlay(new OverlayItem(new GeoPoint((int) (myObject
-                    .getLatitude() * 1E6),
-                    (int) (myObject.getLongitude() * 1E6)),
-                    myObject.getTitle(), myObject.getTime()));
+            overlay.addOverlay(new MapOverlayItem(aXMLTag.getAbsolutePath(),
+                    new GeoPoint((int) (myObject.getLatitude() * 1E6),
+                            (int) (myObject.getLongitude() * 1E6)), myObject
+                            .getTitle(), "Author: " + myObject.getUser()));
             theMapView.getOverlays().add(overlay);
         }
     }
@@ -93,19 +100,34 @@ public class ViewTab extends MapActivity {
     }
 }
 
-class MapOverlay extends ItemizedOverlay<OverlayItem> {
+class MapOverlayItem extends OverlayItem {
+    private String theXMLObjectLocation;
 
-    private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
+    public MapOverlayItem(String aXMLObjectLocation, GeoPoint arg0,
+            String arg1, String arg2) {
+        super(arg0, arg1, arg2);
+
+        theXMLObjectLocation = aXMLObjectLocation;
+    }
+
+    public String getXMLLocation() {
+        return theXMLObjectLocation;
+    }
+}
+
+class MapOverlay extends ItemizedOverlay<MapOverlayItem> {
+
+    private List<MapOverlayItem> overlays;
     private Context context;
 
     public MapOverlay(Drawable defaultMarker, Context context) {
         super(boundCenterBottom(defaultMarker));
-        overlays = new ArrayList<OverlayItem>();
+        overlays = new ArrayList<MapOverlayItem>();
         this.context = context;
     }
 
     @Override
-    protected OverlayItem createItem(int i) {
+    protected MapOverlayItem createItem(int i) {
         return overlays.get(i);
     }
 
@@ -114,18 +136,21 @@ class MapOverlay extends ItemizedOverlay<OverlayItem> {
         return overlays.size();
     }
 
-    public void addOverlay(OverlayItem overlay) {
+    public void addOverlay(MapOverlayItem overlay) {
         overlays.add(overlay);
         this.populate();
     }
 
     @Override
     protected boolean onTap(int index) {
-        OverlayItem item = overlays.get(index);
+        // should start a new activity describing the information
+
+        MapOverlayItem item = overlays.get(index);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
         dialog.setTitle(item.getTitle());
         dialog.setMessage(item.getSnippet());
         dialog.show();
+        
         return true;
     }
 }

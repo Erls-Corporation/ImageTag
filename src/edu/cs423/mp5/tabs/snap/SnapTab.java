@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -45,10 +48,21 @@ public class SnapTab extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.snap_option:
-                Toast.makeText(this, "Taking Photo!", Toast.LENGTH_SHORT)
-                        .show();
+                LocationManager theLocationService = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                savePicture();
+                Location myLocation = theLocationService
+                        .getLastKnownLocation(theLocationService
+                                .getBestProvider(new Criteria(), false));
+
+                if (myLocation != null) {
+                    Toast.makeText(this, "Taking Photo!", Toast.LENGTH_SHORT)
+                            .show();
+
+                    savePicture();
+                } else {
+                    Toast.makeText(this, "Location Not Available. Taking Pictures Is Disabled!",
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

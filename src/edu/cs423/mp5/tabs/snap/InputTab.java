@@ -81,8 +81,9 @@ public class InputTab extends Activity {
     }
 
     private boolean tryToSave() {
+        Toast.makeText(this, "Creating Preview...", Toast.LENGTH_SHORT).show();
+        
         if (tryToCreatePreview()) {
-
             ImageTagXMLObject myAssociatedXMLObject = new ImageTagXMLObject(
                     this);
             myAssociatedXMLObject.setPictureFilepath(theFilepath);
@@ -103,19 +104,18 @@ public class InputTab extends Activity {
     }
 
     private boolean tryToCreatePreview() {
-        Toast.makeText(this, "Creating Preview...", Toast.LENGTH_SHORT).show();
-        
         Bitmap myBitmap = BitmapFactory.decodeFile(theFilepath);
         int width = myBitmap.getWidth();
         int height = myBitmap.getHeight();
-        int newWidth = 38;
-        int newHeight = 50;
+        int newWidth = 60;
+        int newHeight = 80;
         
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
        
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
+        matrix.postRotate(90);
         Bitmap resizedBitmap = Bitmap.createBitmap(myBitmap, 0, 0,
                           width, height, matrix, true);
         FileOutputStream out;
