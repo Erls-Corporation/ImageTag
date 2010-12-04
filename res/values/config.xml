@@ -5,4 +5,13 @@
     
     <string name="local_data">cs423</string>
     <string name="filepath_key">filepath_key</string>
+        
+    <string name="picture_filepath_key">picture_filepath_key</string>
+    <string name="preview_picture_filepath_key">preview_picture_filepath_key</string>
+    <string name="title_key">title_key</string>
+    <string name="user_key">user_key</string>
+    <string name="users_key">users_key</string>
+    <string name="time_key">time_key</string>
+    <string name="latitude_key">latitude_key</string>
+    <string name="longitude_key">longitude_key</string>
 </resources>

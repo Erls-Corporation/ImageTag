@@ -13,8 +13,8 @@ import com.google.android.maps.OverlayItem;
 
 import edu.cs423.mp5.R;
 import edu.cs423.mp5.xmllib.ImageTagXMLObject;
-import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -86,10 +86,10 @@ public class ViewTab extends MapActivity {
             MapOverlay overlay = new MapOverlay(Drawable
                     .createFromPath(myObject.getPreviewPicturePath()), this);
 
-            overlay.addOverlay(new MapOverlayItem(aXMLTag.getAbsolutePath(),
-                    new GeoPoint((int) (myObject.getLatitude() * 1E6),
-                            (int) (myObject.getLongitude() * 1E6)), myObject
-                            .getTitle(), "Author: " + myObject.getUser()));
+            overlay.addOverlay(new MapOverlayItem(myObject, new GeoPoint(
+                    (int) (myObject.getLatitude() * 1E6), (int) (myObject
+                            .getLongitude() * 1E6)), myObject.getTitle(),
+                    "Author: " + myObject.getUser()));
             theMapView.getOverlays().add(overlay);
         }
     }
@@ -101,17 +101,17 @@ public class ViewTab extends MapActivity {
 }
 
 class MapOverlayItem extends OverlayItem {
-    private String theXMLObjectLocation;
+    private ImageTagXMLObject theXMLObject;
 
-    public MapOverlayItem(String aXMLObjectLocation, GeoPoint aGeoPoint,
+    public MapOverlayItem(ImageTagXMLObject aXMLObject, GeoPoint aGeoPoint,
             String aTitle, String aSnippet) {
         super(aGeoPoint, aTitle, aSnippet);
 
-        theXMLObjectLocation = aXMLObjectLocation;
+        theXMLObject = aXMLObject;
     }
 
-    public String getXMLLocation() {
-        return theXMLObjectLocation;
+    public ImageTagXMLObject getXMLObject() {
+        return theXMLObject;
     }
 }
 
@@ -143,14 +143,33 @@ class MapOverlay extends ItemizedOverlay<MapOverlayItem> {
 
     @Override
     protected boolean onTap(int index) {
-        // should start a new activity describing the information
-
         MapOverlayItem item = overlays.get(index);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
-        dialog.setTitle(item.getTitle());
-        dialog.setMessage(item.getSnippet());
-        dialog.show();
-        
+        ImageTagXMLObject myObject = item.getXMLObject();
+
+        String thePictureFilepath = myObject.getPictureFilepath();
+        String thePreviewPictureFilepath = myObject.getPreviewPicturePath();
+        String theTitle = myObject.getTitle();
+        String theUser = myObject.getUser();
+        String theUsers = myObject.getUsers();
+        String theTime = myObject.getTime();
+        Double theLatitude = myObject.getLatitude();
+        Double theLongitude = myObject.getLongitude();
+
+        Intent myIntent = new Intent(this.context, OverlayActivity.class);
+        myIntent.putExtra(context.getString(R.string.picture_filepath_key),
+                thePictureFilepath);
+        myIntent.putExtra(context
+                .getString(R.string.preview_picture_filepath_key),
+                thePreviewPictureFilepath);
+        myIntent.putExtra(context.getString(R.string.title_key), theTitle);
+        myIntent.putExtra(context.getString(R.string.user_key), theUser);
+        myIntent.putExtra(context.getString(R.string.users_key), theUsers);
+        myIntent.putExtra(context.getString(R.string.time_key), theTime);
+        myIntent.putExtra(context.getString(R.string.latitude_key), theLatitude);
+        myIntent.putExtra(context.getString(R.string.longitude_key), theLongitude);
+
+        this.context.startActivity(myIntent);
+
         return true;
     }
 }
