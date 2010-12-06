@@ -5,6 +5,15 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
@@ -13,15 +22,11 @@ import com.google.android.maps.OverlayItem;
 
 import edu.cs423.mp5.R;
 import edu.cs423.mp5.xmllib.ImageTagXMLObject;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.os.Environment;
 
 public class ViewTab extends MapActivity {
 
     private MapView theMapView;
+    private static String netIdFilter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,25 @@ public class ViewTab extends MapActivity {
         theMapView = (MapView) findViewById(R.id.mapview);
         theMapView.setBuiltInZoomControls(true);
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.viewtab_filter_menu, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter_option:
+                Intent myIntent = new Intent(ViewTab.this, ViewInputTab.class);
+                ViewTab.this.startActivity(myIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -40,6 +64,18 @@ public class ViewTab extends MapActivity {
         theMapView.getOverlays().clear();
 
         scanAndAddOverlay();
+    }
+    
+    static void setFilter(String filterName) {
+    	netIdFilter = filterName;
+    }
+    
+    static String getFilter() {
+    	if (netIdFilter != null && netIdFilter.length() > 0) {
+    	    return netIdFilter;
+    	} else {
+    		return "<none>";
+    	}
     }
 
     private static String getExtension(File f) {
@@ -69,8 +105,14 @@ public class ViewTab extends MapActivity {
                 }
             });
 
-            for (File myXMLObject : myXMLObjects) {
-                addOverlay(myXMLObject);
+            if (netIdFilter == null || netIdFilter.trim().length() == 0) {
+            	for (File myXMLObject : myXMLObjects) {
+                    addOverlay(myXMLObject);
+                }
+            } else {
+            	for (File myXMLObject : myXMLObjects) {
+                    addOverlay(myXMLObject, netIdFilter.toLowerCase().trim());
+                }
             }
         } else {
             throw new IllegalStateException(myStoragePath
@@ -83,15 +125,29 @@ public class ViewTab extends MapActivity {
                 this, aXMLTag.getAbsolutePath());
 
         if (myObject != null) {
-            MapOverlay overlay = new MapOverlay(Drawable
-                    .createFromPath(myObject.getPreviewPicturePath()), this);
-
-            overlay.addOverlay(new MapOverlayItem(myObject, new GeoPoint(
-                    (int) (myObject.getLatitude() * 1E6), (int) (myObject
-                            .getLongitude() * 1E6)), myObject.getTitle(),
-                    "Author: " + myObject.getUser()));
-            theMapView.getOverlays().add(overlay);
+        	createAndAddOverlay(myObject);
         }
+    }
+    
+    private void addOverlay(File aXMLTag, String filter) {
+        ImageTagXMLObject myObject = ImageTagXMLObject.readImageTagXMLObject(
+                this, aXMLTag.getAbsolutePath());
+
+        if (myObject != null  && (myObject.getUser().toLowerCase().contains(filter) ||
+        		myObject.getUsers().toLowerCase().contains(filter))) {
+            createAndAddOverlay(myObject);
+        }
+    }
+    
+    private void createAndAddOverlay(ImageTagXMLObject myObject) {
+        MapOverlay overlay = new MapOverlay(Drawable
+                .createFromPath(myObject.getPreviewPicturePath()), this);
+
+        overlay.addOverlay(new MapOverlayItem(myObject, new GeoPoint(
+                (int) (myObject.getLatitude() * 1E6), (int) (myObject
+                        .getLongitude() * 1E6)), myObject.getTitle(),
+                "Author: " + myObject.getUser()));
+        theMapView.getOverlays().add(overlay);
     }
 
     @Override

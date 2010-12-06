@@ -14,4 +14,5 @@
     <string name="time_key">time_key</string>
     <string name="latitude_key">latitude_key</string>
     <string name="longitude_key">longitude_key</string>
+<string name="filter_key">filter_key</string>
 </resources>
